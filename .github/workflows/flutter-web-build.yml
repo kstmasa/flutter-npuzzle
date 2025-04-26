@@ -1,5 +1,5 @@
 
-name: Dart
+name: flutter-web-build
  
 on:
   push:
@@ -23,3 +23,8 @@ jobs:
       - run: flutter pub get
       - run: flutter test
       - run: flutter build web
+      - name: Upload build output as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: flutter-web-build
+          path: build/web
