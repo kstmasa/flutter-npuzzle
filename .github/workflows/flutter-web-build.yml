@@ -41,7 +41,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: flutter-web-build
+          name: github-pages
           path: build/web
   # Deployment job
   deploy:
