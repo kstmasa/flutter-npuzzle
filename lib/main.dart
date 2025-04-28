@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_npuzzle/lib.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,6 +34,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final int level = 3;
+  final MyLibrary library = MyLibrary();
 
   List<int> ordinaryList = [];
   List<int> shuffleList = [];
@@ -44,12 +46,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void startNewGame() {
-    ordinaryList = getOrdinaryList(level);
-    shuffleList = generateShuffleList(level);
-  }
-
-  bool isFinal(int number) {
-    return number == (level * level - 1);
+    setState(() {
+      ordinaryList = getOrdinaryList(level);
+      shuffleList = generateShuffleList(level);
+    });
   }
 
   @override
@@ -94,9 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                           onPressed: () {
-                            setState(() {
-                              startNewGame();
-                            });
+                            startNewGame();
                           },
                           child: const Text(
                             'New Game',
@@ -172,6 +170,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return listEquals(shuffleList, ordinaryList);
   }
 
+  bool isFinal(int number) {
+    return library.isFinal(number, level);
+  }
+
   Future<void> _showMyDialog() async {
     return showDialog<void>(
       context: context,
@@ -190,9 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
             TextButton(
               child: const Text('Play again'),
               onPressed: () {
-                setState(() {
-                  startNewGame();
-                });
+                startNewGame();
                 Navigator.of(context).pop();
               },
             ),
