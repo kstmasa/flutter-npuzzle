@@ -45,13 +45,6 @@ class _MyHomePageState extends State<MyHomePage> {
     startNewGame();
   }
 
-  void startNewGame() {
-    setState(() {
-      ordinaryList = getOrdinaryList(level);
-      shuffleList = generateShuffleList(level);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: const EdgeInsets.all(20),
                     crossAxisSpacing: 3,
                     mainAxisSpacing: 3,
-                    crossAxisCount: 3,
+                    crossAxisCount: level,
                     children: shuffleList
                         .map((e) => GestureDetector(
                               onTap: () => !isFinal(e) ? shift(e) : (),
@@ -131,6 +124,13 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void startNewGame() {
+    setState(() {
+      ordinaryList = getOrdinaryList(level);
+      shuffleList = generateShuffleList(level);
+    });
+  }
+
   List<int> getOrdinaryList(int level) {
     return List<int>.generate(level * level, (e) => e, growable: true);
   }
@@ -143,13 +143,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void shift(int number) {
     int index = shuffleList.indexOf(number);
-    if (index - level >= 0 && shuffleList[index - level] == 8) {
+    if (index - level >= 0 && isFinal(shuffleList[index - level])) {
       swap(index, index - level);
-    } else if (index + level <= 8 && shuffleList[index + level] == 8) {
+    } else if (isLessThanFinal(index + level) &&
+        isFinal(shuffleList[index + level])) {
       swap(index, index + level);
-    } else if ((index % level != 0) && shuffleList[index - 1] == 8) {
+    } else if ((index % level != 0) && isFinal(shuffleList[index - 1])) {
       swap(index, index - 1);
-    } else if (((index + 1) % level != 0) && shuffleList[index + 1] == 8) {
+    } else if (((index + 1) % level != 0) && isFinal(shuffleList[index + 1])) {
       swap(index, index + 1);
     }
 
@@ -172,6 +173,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool isFinal(int number) {
     return library.isFinal(number, level);
+  }
+
+  bool isLessThanFinal(int number) {
+    return library.isLessThanFinal(number, level);
   }
 
   Future<void> _showMyDialog() async {
