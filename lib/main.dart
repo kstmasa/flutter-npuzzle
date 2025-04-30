@@ -79,73 +79,74 @@ class _MyHomePageState extends State<MyHomePage> {
                     Align(
                         alignment: Alignment.topCenter,
                         child: Container(
-                          margin: EdgeInsets.only(top: 8, right: 24),
-                          child: Text("LEVEL",
+                            child: Column(children: [
+                          Container(
+                              margin: EdgeInsets.only(top: 8, right: 24),
+                              child: Text("LEVEL",
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .inversePrimary,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24))),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(24.0),
+                                border: Border.all(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .inversePrimary,
+                                )),
+                            child: DropdownButton<String>(
+                              borderRadius: BorderRadius.circular(24.0),
+                              value: level.toString(),
+                              icon: const Icon(null),
+                              isExpanded: true,
+                              // elevation: 16,
                               style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
                                       .inversePrimary,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 24)),
-                        )),
-                    Align(
-                        alignment: Alignment.topCenter,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(24.0),
-                              border: Border.all(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .inversePrimary,
-                              )),
-                          margin: EdgeInsets.only(top: 44),
-                          child: DropdownButton<String>(
-                            borderRadius: BorderRadius.circular(24.0),
-                            value: level.toString(),
-                            icon: const Icon(null),
-                            isExpanded: true,
-                            // elevation: 16,
-                            style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .inversePrimary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24),
-                            underline: Container(height: 0),
-                            onChanged: (String? value) {
-                              setState(() {
-                                level = int.parse(value!);
-                                startNewGame();
-                              });
-                            },
-                            items: dropdownList
-                                .map<DropdownMenuItem<String>>((int value) {
-                              return DropdownMenuItem<String>(
-                                  alignment: AlignmentDirectional.center,
-                                  value: value.toString(),
-                                  child: Text(value.toString()));
-                            }).toList(),
+                                  fontSize: 24),
+                              underline: Container(height: 0),
+                              onChanged: (String? value) {
+                                setState(() {
+                                  level = int.parse(value!);
+                                  startNewGame();
+                                });
+                              },
+                              items: dropdownList
+                                  .map<DropdownMenuItem<String>>((int value) {
+                                return DropdownMenuItem<String>(
+                                    alignment: AlignmentDirectional.center,
+                                    value: value.toString(),
+                                    child: Text(value.toString()));
+                              }).toList(),
+                            ),
                           ),
-                        )),
-                    Align(
-                        alignment: Alignment.center,
-                        child: SizedBox(
-                          // width: 500,
-                          height: 500,
-                          child: GridView.count(
-                            primary: false,
-                            padding: const EdgeInsets.all(20),
-                            crossAxisSpacing: 3,
-                            mainAxisSpacing: 3,
-                            crossAxisCount: level,
-                            children: shuffleList
-                                .map((e) => GestureDetector(
-                                      onTap: () => !isFinal(e) ? shift(e) : (),
-                                      child: getBox(e, isFinal(e)),
-                                    ))
-                                .toList(),
+                          SizedBox(
+                            height: 40,
                           ),
-                        )),
+                          SizedBox(
+                            // width: 500,
+                            height: 500,
+                            child: GridView.count(
+                              primary: false,
+                              padding: const EdgeInsets.all(20),
+                              crossAxisSpacing: 3,
+                              mainAxisSpacing: 3,
+                              crossAxisCount: level,
+                              children: shuffleList
+                                  .map((e) => GestureDetector(
+                                        onTap: () =>
+                                            !isFinal(e) ? shift(e) : (),
+                                        child: getBox(e, isFinal(e)),
+                                      ))
+                                  .toList(),
+                            ),
+                          )
+                        ]))),
                     Align(
                         alignment: Alignment.bottomCenter,
                         child: Container(
