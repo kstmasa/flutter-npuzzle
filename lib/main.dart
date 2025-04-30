@@ -14,9 +14,20 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'N Puzzle Game',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-        useMaterial3: true,
-      ),
+          colorScheme: ColorScheme.light(
+              inversePrimary: Colors.black,
+              secondary: Colors.teal[100]!,
+              surface: Colors.white,
+              primary: Colors.black),
+          useMaterial3: true),
+      darkTheme: ThemeData(
+          colorScheme: ColorScheme.dark(
+              inversePrimary: Colors.white,
+              secondary: Colors.teal[700]!,
+              surface: Colors.black,
+              primary: Colors.white),
+          useMaterial3: true),
+      themeMode: ThemeMode.system,
       home: const MyHomePage(title: 'N Puzzle Game'),
       debugShowCheckedModeBanner: false,
     );
@@ -33,8 +44,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final int level = 3;
+  int level = 3;
   final MyLibrary library = MyLibrary();
+  List<int> dropdownList = [3, 4, 5, 6];
 
   List<int> ordinaryList = [];
   List<int> shuffleList = [];
@@ -49,62 +61,123 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: Text(widget.title),
+          shape: Border(
+              bottom: BorderSide(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                  width: 2)),
         ),
         body: Container(
             alignment: Alignment.topCenter,
             width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: [
-                SizedBox(
-                  width: 600,
-                  height: 600,
-                  child: GridView.count(
-                    primary: false,
-                    padding: const EdgeInsets.all(20),
-                    crossAxisSpacing: 3,
-                    mainAxisSpacing: 3,
-                    crossAxisCount: level,
-                    children: shuffleList
-                        .map((e) => GestureDetector(
-                              onTap: () => !isFinal(e) ? shift(e) : (),
-                              child: getBox(e, isFinal(e)),
-                            ))
-                        .toList(),
-                  ),
-                ),
-                SizedBox(
-                    width: 600,
-                    child: OverflowBar(
-                      alignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.all(24),
-                            shape: RoundedRectangleBorder(
+            child: Container(
+                width: 500,
+                padding: EdgeInsets.only(left: 24, right: 24),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Align(
+                        alignment: Alignment.topCenter,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 8, right: 24),
+                          child: Text("LEVEL",
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .inversePrimary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24)),
+                        )),
+                    Align(
+                        alignment: Alignment.topCenter,
+                        child: Container(
+                          decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(24.0),
-                            ),
-                          ),
-                          onPressed: () {
-                            startNewGame();
-                          },
-                          child: const Text(
-                            'New Game',
+                              border: Border.all(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary,
+                              )),
+                          margin: EdgeInsets.only(top: 44),
+                          child: DropdownButton<String>(
+                            borderRadius: BorderRadius.circular(24.0),
+                            value: level.toString(),
+                            icon: const Icon(null),
+                            isExpanded: true,
+                            // elevation: 16,
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 24),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24),
+                            underline: Container(height: 0),
+                            onChanged: (String? value) {
+                              setState(() {
+                                level = int.parse(value!);
+                                startNewGame();
+                              });
+                            },
+                            items: dropdownList
+                                .map<DropdownMenuItem<String>>((int value) {
+                              return DropdownMenuItem<String>(
+                                  alignment: AlignmentDirectional.center,
+                                  value: value.toString(),
+                                  child: Text(value.toString()));
+                            }).toList(),
                           ),
-                        ),
-                        // OutlinedButton(
-                        //   onPressed: () {
-                        //     Navigator.of(context).pop();
-                        //   },
-                        //   child: Text('Back to Github!'),
-                        // ),
-                      ],
-                    ))
-              ],
-            )));
+                        )),
+                    Align(
+                        alignment: Alignment.center,
+                        child: SizedBox(
+                          // width: 500,
+                          height: 500,
+                          child: GridView.count(
+                            primary: false,
+                            padding: const EdgeInsets.all(20),
+                            crossAxisSpacing: 3,
+                            mainAxisSpacing: 3,
+                            crossAxisCount: level,
+                            children: shuffleList
+                                .map((e) => GestureDetector(
+                                      onTap: () => !isFinal(e) ? shift(e) : (),
+                                      child: getBox(e, isFinal(e)),
+                                    ))
+                                .toList(),
+                          ),
+                        )),
+                    Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                            padding: EdgeInsets.only(bottom: 24),
+                            width: 600,
+                            child: OverflowBar(
+                              alignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    padding: const EdgeInsets.all(24),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(24.0),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    startNewGame();
+                                  },
+                                  child: SizedBox(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: const Text(
+                                        'New Game',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 24),
+                                      )),
+                                ),
+                              ],
+                            )))
+                  ],
+                ))));
   }
 
   Container getBox(int num, bool isFinal) {
@@ -114,7 +187,9 @@ class _MyHomePageState extends State<MyHomePage> {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(20)),
-        color: isFinal ? Colors.transparent : Colors.teal[100],
+        color: isFinal
+            ? Colors.transparent
+            : Theme.of(context).colorScheme.secondary,
       ),
       alignment: Alignment.center,
       child: Text(
@@ -185,24 +260,51 @@ class _MyHomePageState extends State<MyHomePage> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Well Done!'),
+          actionsAlignment: MainAxisAlignment.spaceAround,
+          titlePadding: EdgeInsets.all(0),
+          title: Container(
+              // alignment: Alignment.topLeft,
+              // padding: EdgeInsets.all(24),
+              child: Column(
+            children: [
+              Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.fromLTRB(24, 12, 24, 6),
+                  child: Text(
+                    'Well Done!',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  )),
+              Divider()
+            ],
+          )),
           content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Would you like to play this N puzzle again?'),
+                Text(
+                  'Would you like to play this N puzzle again?',
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                )
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Play again'),
+              child: const Text(
+                'Play again',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
               onPressed: () {
                 startNewGame();
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text('Stop'),
+              child: const Text(
+                'Stop',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
