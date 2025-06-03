@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
             width: MediaQuery.of(context).size.width,
             child: Container(
                 width: 500,
-                padding: EdgeInsets.only(left: 24, right: 24),
+                padding: const EdgeInsets.only(left: 24, right: 24),
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
@@ -81,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Container(
                             child: Column(children: [
                           Container(
-                              margin: EdgeInsets.only(top: 8, right: 24),
+                              margin: const EdgeInsets.only(top: 8, right: 24),
                               child: Text("LEVEL",
                                   style: TextStyle(
                                       color: Theme.of(context)
@@ -125,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               }).toList(),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 40,
                           ),
                           SizedBox(
@@ -150,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Align(
                         alignment: Alignment.bottomCenter,
                         child: Container(
-                            padding: EdgeInsets.only(bottom: 24),
+                            padding: const EdgeInsets.only(bottom: 24),
                             width: 600,
                             child: OverflowBar(
                               alignment: MainAxisAlignment.spaceEvenly,
@@ -262,7 +262,7 @@ class _MyHomePageState extends State<MyHomePage> {
       builder: (BuildContext context) {
         return AlertDialog(
           actionsAlignment: MainAxisAlignment.spaceAround,
-          titlePadding: EdgeInsets.all(0),
+          titlePadding: const EdgeInsets.all(0),
           title: Container(
               // alignment: Alignment.topLeft,
               // padding: EdgeInsets.all(24),
@@ -270,12 +270,12 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.fromLTRB(24, 12, 24, 6),
-                  child: Text(
+                  padding: const EdgeInsets.fromLTRB(24, 12, 24, 6),
+                  child: const Text(
                     'Well Done!',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   )),
-              Divider()
+              const Divider()
             ],
           )),
           content: const SingleChildScrollView(
