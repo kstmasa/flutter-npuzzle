@@ -44,7 +44,8 @@ app.*.map.json
 # /android/app/profile
 # /android/app/release
 
-/android/*
-/ios/*
+/linux/*
+/windows/*
+/macos/*
 .metadata
 pubspec.lock
